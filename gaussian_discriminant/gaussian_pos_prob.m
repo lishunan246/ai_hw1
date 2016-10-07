@@ -20,3 +20,20 @@ K = length(Phi);
 P = zeros(N, K);
 
 % Your code HERE
+M=size(X,1);
+l=zeros(N,K);
+px=l;
+for k=1:K
+    SigmaK=Sigma(:,:,k);
+    t=Mu(:,k);
+    MuK=repmat( t,1,N);
+    
+   % l(:,k)=1/(2*pi*sqrt(det(SigmaK)))*exp(-0.5*(X-MuK)'*inv(SigmaK)*(X-MuK));
+   l(:,k)=mvnpdf(X(:,k),t,SigmaK);
+end
+
+
+px=l*repmat(Phi,N,1);
+p=l.*repmat(Phi,N,1)./px;
+
+

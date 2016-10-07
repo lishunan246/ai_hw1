@@ -15,4 +15,5 @@ px=repmat(sum(x)/total,C,1);
 pw=repmat(sum(x,2)/total,1,N);
 
 p=(l.*pw)./px;
+p(isnan(p))=0;
 end

@@ -20,12 +20,13 @@ axis([range(1) - 1, range(2) + 1, 0, 0.5]);
 %TODO
 %compute the number of all the misclassified x using maximum likelihood decision rule
 [m,n]=size(l);
+
 t=zeros(m,n);
 for col=1:n
     t(:,col)=l(:,col)==max(l(:,col));
 end
 
-misclassified_xl=sum(sum(train_x))-sum(sum(t.*train_x));
+misclassified_xl=sum(sum(test_x))-sum(sum(t.*test_x))
 %% Part2 posterior:
 p = posterior(train_x);
 
@@ -36,11 +37,12 @@ axis([range(1) - 1, range(2) + 1, 0, 1.2]);
 
 %TODO
 %compute the number of all the misclassified x using optimal bayes decision rule
+
 for col=1:n
     t(:,col)=p(:,col)==max(p(:,col));
 end
 
-misclassified_xp=sum(sum(train_x))-sum(sum(t.*train_x));
+misclassified_xp=sum(sum(test_x))-sum(sum(t.*test_x))
 %% Part3 risk:
 risk = [0, 1; 2, 0];
 %TODO
@@ -49,7 +51,7 @@ r1=p(1,:)*risk(1,1)+p(2,:)*risk(1,2);
 r2=p(1,:)*risk(2,1)+p(2,:)*risk(2,2);
 r=[r1;r2];
 rmin=min(r);
-
-[C, N] = size(train_x);;
-px=sum(train_x)/sum(sum(train_x));
-totalr=px*rmin';
+rsum=sum(rmin)
+[C, N] = size(test_x);;
+px=sum(test_x)/sum(sum(test_x));
+totalr=px*rmin'
