@@ -9,12 +9,12 @@ Sigma1 = [1 0;0 1];
 phi = 0.5;
 plot_ex1(mu0, Sigma0, mu1, Sigma1, phi, 'Line', 1);
 
-% mu0 = _;
-% Sigma0 = _;
-% mu1 = _;
-% Sigma1 = _;
-% phi = _;
-% plot_ex1(mu0, Sigma0, mu1, Sigma1, phi, 'Line (one side)', 2);
+mu0 = [0;0];
+Sigma0 = [1 0; 0 1];
+mu1 = [1;1];
+Sigma1 = [1 0;0 1];
+phi = 0;
+plot_ex1(mu0, Sigma0, mu1, Sigma1, phi, 'Line (one side)', 2);
 % 
 % mu0 = _;
 % Sigma0 = _;
