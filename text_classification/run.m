@@ -23,10 +23,28 @@ spam_test(:, 1:size(spam_test_tight, 2)) = spam_test_tight;
 
 %TODO
 %Implement a ham/spam email classifier, and calculate the accuracy of your classifier
-Pword_spam=x(2,:)./(num_spam_train);
-Pword_ham=x(1,:)./(num_ham_train);
-r=Pword_spam./Pword_ham;
-%r(isinf(r))=0;
+
+l=likelihood(x);
+r=l(2,:)./l(1,:);
+
 [sorted_value,sorted_index]=sort(r,'descend');
-top10=sorted_index(1:10)
-top=sorted_value(1:10)
+top10=sorted_index(1:10);
+top=sorted_value(1:10);
+
+ham_test=(ham_test~=0);
+spam_test=(spam_test~=0);
+
+p_spam=num_spam_train/(num_ham_train+num_spam_train);
+p_ham=num_ham_train/(num_ham_train+num_spam_train);
+spam_error=0;
+for i=1:size(spam_test,1)
+    px_ham=p_ham;
+    px_spam=p_spam;
+    for j=1:size(spam_test,2)
+        px_ham=px_ham* spam_test(i,j)*l(1,j)+(1-spam_test(i,j))*(1-l(1,j));
+        px_spam=px_spam* spam_test(i,j)*l(2,j)+(1-spam_test(i,j))*(1-l(2,j));
+    end
+    if px_spam<px_ham
+        spam_error=spam_error+1;
+    end
+end

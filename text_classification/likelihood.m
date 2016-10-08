@@ -10,5 +10,7 @@ function l = likelihood(x)
 [C, N] = size(x);
 l = zeros(C, N);
 %TODO
-
+t=sum(x,2);
+tt=repmat(t,1,N);
+l=x./tt;
 end
