@@ -28,23 +28,39 @@ l=likelihood(x);
 r=l(2,:)./l(1,:);
 
 [sorted_value,sorted_index]=sort(r,'descend');
-top10=sorted_index(1:10);
-top=sorted_value(1:10);
+top10=[sorted_index(1:20);sorted_value(1:20)];
 
 ham_test=(ham_test~=0);
 spam_test=(spam_test~=0);
 
 p_spam=num_spam_train/(num_ham_train+num_spam_train);
 p_ham=num_ham_train/(num_ham_train+num_spam_train);
+llog=log(l);
+llog_=log(1-l);
 spam_error=0;
+
 for i=1:size(spam_test,1)
-    px_ham=p_ham;
-    px_spam=p_spam;
-    for j=1:size(spam_test,2)
-        px_ham=px_ham* spam_test(i,j)*l(1,j)+(1-spam_test(i,j))*(1-l(1,j));
-        px_spam=px_spam* spam_test(i,j)*l(2,j)+(1-spam_test(i,j))*(1-l(2,j));
-    end
-    if px_spam<px_ham
+    px_ham=log(p_ham);
+    px_spam=log(p_spam);
+    px_ham=px_ham+spam_test(i,:)*llog(1,:)'+(1-spam_test(i,:))*(llog_(1,:))';
+    px_spam=px_spam+spam_test(i,:)*llog(2,:)'+(1-spam_test(i,:))*(llog_(2,:))';
+
+    if px_spam<=px_ham
         spam_error=spam_error+1;
     end
 end
+ham_error=0;
+for i=1:size(ham_test,1)
+    px_ham=log(p_ham);
+    px_spam=log(p_spam);
+    px_ham=px_ham+ham_test(i,:)*llog(1,:)'+(1-ham_test(i,:))*(llog_(1,:))';
+    px_spam=px_spam+ham_test(i,:)*llog(2,:)'+(1-ham_test(i,:))*(llog_(2,:))';
+
+    if px_spam>=px_ham
+        ham_error=ham_error+1;
+    end
+end
+tp=size(spam_test,1)-spam_error
+fp=ham_error
+fn=spam_error
+tn=size(ham_test,1)-ham_error
